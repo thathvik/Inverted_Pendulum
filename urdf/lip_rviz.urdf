@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<robot name="LIP">
+  <link name="world"/>
+  <link name="l_frame">
+    <inertial>
+      <origin xyz="0 0 1.1" rpy="0 0 0"/>
+      <mass value="1"/>
+      <inertia ixx="1" ixy="0.0" ixz="0.0" iyy="1" iyz="0.0" izz="1"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 1.1" rpy="0 0 0"/>
+      <geometry>
+        <cylinder radius="0.05" length="2.2"/>
+      </geometry>
+      <material name="orange">
+        <color rgba="1.0 0.423529411765 0.0392156862745 1.0"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 1.1" rpy="0 0 0"/>
+      <geometry>
+        <cylinder radius="0.05" length="2.2"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="fixed" type="fixed">
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <parent link="world"/>
+    <child link="l_frame"/>
+  </joint>
+  <link name="l_0">
+    <inertial>
+      <origin xyz="0 0 1.0" rpy="0 0 0"/>
+      <mass value="1"/>
+      <inertia ixx="1" ixy="0.0" ixz="0.0" iyy="1" iyz="0.0" izz="1"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 1.0" rpy="0 0 0"/>
+      <geometry>
+        <cylinder radius="0.05" length="2.0"/>
+      </geometry>
+      <material name="black">
+        <color rgba="0 0 0 1.0"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 1.0" rpy="0 0 0"/>
+      <geometry>
+        <cylinder radius="0.05" length="2.0"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="j_0" type="continuous">
+    <origin xyz="0 0.1 2.15" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <parent link="l_frame"/>
+    <child link="l_0"/>
+    <dynamics damping="0.7" friction="0.0"/>
+  </joint>
+  <transmission name="j_0_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="j_0">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="j_0_motor">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+</robot>

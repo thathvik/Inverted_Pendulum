@@ -1,0 +1,11 @@
+lip:
+  # Publish all joint states -----------------------------------
+  joint_state_controller:
+    type: joint_state_controller/JointStateController
+    publish_rate: 1000
+
+  # Effort Controllers ---------------------------------------
+  joint_effort_controller_j_0:
+    type: effort_controllers/JointEffortController
+    joint: j_0
+    # pid: {p: 100.0, i: 0.01, d: 10.0}

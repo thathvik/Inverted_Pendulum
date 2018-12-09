@@ -1,0 +1,35 @@
+<launch>
+
+  <arg name="name" default="invpend"/>
+  <arg name="model" default="lip"/>
+
+  <arg name="world_frame" default="world"/>
+  <arg name="map_frame"   default="map"/>
+
+  <!-- send the lip robot XML to param server -->
+  <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find inv_pend)/urdf/$(arg model).urdf'" />
+
+  <rosparam file="$(find inv_pend)/config/lip.yaml" command="load"/>
+
+  <node pkg="gazebo_ros" type="gzserver" ns="/" args="" respawn="False" respawn_delay="0.0" name="gzserver" required="False" />
+
+  <node pkg="gazebo_ros" type="gzclient" ns="/" args="" respawn="True" respawn_delay="0.0" name="gzclient" required="False" />
+
+  <node pkg="gazebo_ros" type="spawn_model" ns="/" args="-param robot_description -urdf -model $(arg model) -x 0 -y 0 -z 0 -gazebo_namespace /gzserver" output="screen" respawn="False" respawn_delay="0.0" name="spawn_urdf" required="False" />
+
+  <node name="joint_state_publisher"
+    pkg ="joint_state_publisher"
+    type="joint_state_publisher">
+    <param name="use_gui" value="true"/>
+    <remap from="/joint_states" 
+          to="/$(arg model)/joint_states" />
+  </node>
+  
+  <node pkg="robot_state_publisher" type="robot_state_publisher" name="tf_broadcaster_$(arg model)">
+    <param name="publish_frequency" type="double" value="1000.0"/>
+    <remap from="/joint_states" to="/$(arg model)/joint_states" />
+  </node>
+
+  <node pkg="controller_manager" type="spawner" ns="/$(arg model)" args="joint_state_controller joint_effort_controller_j_0" output="screen" respawn="False" respawn_delay="0.0" name="controller_spawner" required="False" />
+
+</launch>

@@ -1,0 +1,90 @@
+<?xml version="1.0"?>
+<robot name="LIP">
+  <link name="world"/>
+  <link name="l_frame">
+    <inertial>
+      <origin xyz="0 0 1.1" rpy="0 0 0"/>
+      <mass value="1"/>
+      <inertia ixx="1" ixy="0.0" ixz="0.0" iyy="1" iyz="0.0" izz="1"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 1.1" rpy="0 0 0"/>
+      <geometry>
+        <cylinder radius="0.05" length="2.2"/>
+      </geometry>
+      <material name="Gazebo/Orange"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 1.1" rpy="0 0 0"/>
+      <geometry>
+        <cylinder radius="0.05" length="2.2"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="fixed" type="fixed">
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <parent link="world"/>
+    <child link="l_frame"/>
+  </joint>
+  <link name="l_0">
+    <inertial>
+      <origin xyz="0 0 1.0" rpy="0 0 0"/>
+      <mass value="1"/>
+      <inertia ixx="1" ixy="0.0" ixz="0.0" iyy="1" iyz="0.0" izz="1"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 1.0" rpy="0 0 0"/>
+      <geometry>
+        <cylinder radius="0.05" length="2.0"/>
+      </geometry>
+      <material name="Gazebo/Black"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 1.0" rpy="0 0 0"/>
+      <geometry>
+        <cylinder radius="0.05" length="2.0"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="j_0" type="continuous">
+    <origin xyz="0 0.1 2.15" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <parent link="l_frame"/>
+    <child link="l_0"/>
+    <dynamics damping="0.7" friction="0.0"/>
+  </joint>
+  <transmission name="j_0_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="j_0">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="j_0_motor">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+  <gazebo reference="j_0">
+    <provideFeedback>true</provideFeedback>
+  </gazebo>
+  <gazebo>
+    <plugin filename="libgazebo_ros_ft_sensor.so" name="force_torque_plugin_j_0">
+      <alwaysOn>true</alwaysOn>
+      <updateRate>100</updateRate>
+      <jointName>j_0</jointName>
+      <topicName>lip/ftSensors/j_0</topicName>
+    </plugin>
+  </gazebo>
+  <gazebo reference="world">
+    <material>Gazebo/Black</material>
+  </gazebo>
+  <gazebo reference="l_0">
+    <material>Gazebo/Black</material>
+  </gazebo>
+  <gazebo reference="l_frame">
+    <material>Gazebo/Orange</material>
+  </gazebo>
+  <gazebo>
+    <plugin filename="libgazebo_ros_control.so" name="gazebo_ros_control">
+      <robotNamespace>lip</robotNamespace>
+    </plugin>
+  </gazebo>
+</robot>

@@ -1,0 +1,31 @@
+
+<launch>
+    
+    <arg name="name" default="LIP"/>
+    <arg name="model" default="lip"/>
+
+    <arg name="world_frame" default="world"/>
+    <arg name="map_frame"   default="map"/>
+
+    <!-- send the lip robot XML to param server -->
+    <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find lip_description)/urdf/$(arg model).urdf'" />
+
+    <node name="joint_state_publisher"
+        pkg ="joint_state_publisher"
+        type="joint_state_publisher">
+        <param name="use_gui" value="true"/>
+        <remap from="/joint_states" 
+                to="/$(arg model)/joint_states" />
+    </node>
+
+    
+    <node pkg="robot_state_publisher" type="robot_state_publisher" name="tf_broadcaster_$(arg model)">
+        <param name="publish_frequency" type="double" value="1000.0"/>
+        <remap from="/joint_states" to="/$(arg model)/joint_states" />
+    </node>
+    
+    <node pkg="rviz" type="rviz" ns="/$(arg model)/" args="" respawn="True" respawn_delay="0.0" name="rviz" required="False"></node>
+
+
+</launch>
+
