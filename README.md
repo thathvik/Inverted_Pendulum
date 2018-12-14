@@ -1,7 +1,7 @@
 # Linear Inverted Pendulum
 This is the final assignment for MTE 4007: Robot Dynamics and Control, Department of Mechatronics Engineering, Manipal Institute of Technology
 
-You need to use the alloted control algorithm to control the LIP model. 
+The inverted pendulum is controlled successfully using a PID.
 
 
 ## Instructions
