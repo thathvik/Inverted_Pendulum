@@ -6,8 +6,9 @@ The inverted pendulum is controlled successfully using a PID.
 
 ## Instructions
 
-In order to run this package, add it to your catkin workspace.
-You can the use the following commands, each in a new terminal window:
+In order to run this package, add it to your catkin workspace, and name it inv_pend.
+
+Then, you can the use the following commands, each in a new terminal window:
 
 1. Start roscore
 ```bash
